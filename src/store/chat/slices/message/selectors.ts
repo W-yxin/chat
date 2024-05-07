@@ -28,16 +28,8 @@ const getMeta = (message: ChatMessage) => {
       return message.meta;
     }
 
-    case 'assistant': {
+    default: {
       return sessionMetaSelectors.currentAgentMeta(useSessionStore.getState());
-    }
-
-    case 'function': {
-      // TODO: 后续改成将 plugin metadata 写入 message metadata 的方案
-      return {
-        avatar: '🧩',
-        title: 'plugin-unknown',
-      };
     }
   }
 };
@@ -134,6 +126,8 @@ const latestMessage = (s: ChatStore) => currentChats(s).at(-1);
 
 const currentChatLoadingState = (s: ChatStore) => !s.messagesInit;
 
+const isMessageEditing = (id: string) => (s: ChatStore) => s.messageEditingIds.includes(id);
+
 export const chatSelectors = {
   chatsMessageString,
   currentChatIDsWithGuideMessage,
@@ -145,6 +139,7 @@ export const chatSelectors = {
   getFunctionMessageProps,
   getMessageById,
   getTraceIdByMessageId,
+  isMessageEditing,
   latestMessage,
   showInboxWelcome,
 };

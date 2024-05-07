@@ -9,6 +9,7 @@ export interface ChatMessageState {
   activeId: string;
   chatLoadingId?: string;
   inputMessage: string;
+  messageEditingIds: string[];
   messageLoadingIds: string[];
   messages: ChatMessage[];
   /**
@@ -20,6 +21,7 @@ export interface ChatMessageState {
 export const initialMessageState: ChatMessageState = {
   activeId: 'inbox',
   inputMessage: '',
+  messageEditingIds: [],
   messageLoadingIds: [],
   messages: [],
   messagesInit: false,

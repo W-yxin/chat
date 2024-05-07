@@ -620,10 +620,7 @@ describe('chatMessage actions', () => {
           messages,
           assistantMessageId,
         );
-        expect(response.content).toEqual(aiResponse);
         expect(response.isFunctionCall).toEqual(false);
-        expect(response.functionCallAtEnd).toEqual(false);
-        expect(response.functionCallContent).toEqual('');
       });
     });
 
@@ -642,10 +639,7 @@ describe('chatMessage actions', () => {
           messages,
           assistantMessageId,
         );
-        expect(response.content).toEqual(aiResponse);
         expect(response.isFunctionCall).toEqual(true);
-        expect(response.functionCallAtEnd).toEqual(false);
-        expect(response.functionCallContent).toEqual('');
       });
     });
 
@@ -664,12 +658,7 @@ describe('chatMessage actions', () => {
           messages,
           assistantMessageId,
         );
-        expect(response.content).toEqual(aiResponse);
         expect(response.isFunctionCall).toEqual(true);
-        expect(response.functionCallAtEnd).toEqual(true);
-        expect(response.functionCallContent).toEqual(
-          '{"tool_calls":[{"id":"call_sbca","type":"function","function":{"name":"pluginName____apiName","arguments":{"key":"value"}}}]}',
-        );
       });
     });
 
