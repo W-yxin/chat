@@ -10,7 +10,7 @@ import {
   Trash,
   Wand2,
 } from 'lucide-react';
-import { memo, useMemo } from 'react';
+import { memo, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Flexbox } from 'react-layout-kit';
 
@@ -133,6 +133,8 @@ const TopicContent = memo<TopicContentProps>(({ id, title, fav, showMore }) => {
     [],
   );
 
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
   return (
     <Flexbox
       align={'center'}
@@ -143,6 +145,7 @@ const TopicContent = memo<TopicContentProps>(({ id, title, fav, showMore }) => {
         if (!id) return;
         if (e.altKey) toggleEditing(true);
       }}
+      style={{ position: 'relative' }}
     >
       <ActionIcon
         color={fav && !isLoading ? theme.colorWarning : undefined}
@@ -155,6 +158,7 @@ const TopicContent = memo<TopicContentProps>(({ id, title, fav, showMore }) => {
         }}
         size={'small'}
         spin={isLoading}
+        style={{ zIndex: 1 }}
       />
       {!editing ? (
         <Paragraph
@@ -183,26 +187,43 @@ const TopicContent = memo<TopicContentProps>(({ id, title, fav, showMore }) => {
           value={title}
         />
       )}
-      {showMore && !editing && (
-        <Dropdown
-          arrow={false}
-          menu={{
-            items: items,
-            onClick: ({ domEvent }) => {
-              domEvent.stopPropagation();
-            },
-          }}
-          trigger={['click']}
-        >
-          <ActionIcon
-            className="topic-more"
-            icon={MoreVertical}
-            onClick={(e) => {
-              e.stopPropagation();
+      {(showMore || dropdownOpen) && !editing && (
+        <>
+          <Dropdown
+            arrow={false}
+            menu={{
+              items: items,
+              onClick: ({ domEvent }) => {
+                domEvent.stopPropagation();
+              },
             }}
-            size={'small'}
-          />
-        </Dropdown>
+            onOpenChange={setDropdownOpen}
+            trigger={['contextMenu']}
+          >
+            <div style={{ height: '100%', position: 'absolute', width: '100%' }}></div>
+          </Dropdown>
+
+          <Dropdown
+            arrow={false}
+            menu={{
+              items: items,
+              onClick: ({ domEvent }) => {
+                domEvent.stopPropagation();
+              },
+            }}
+            onOpenChange={setDropdownOpen}
+            trigger={['click']}
+          >
+            <ActionIcon
+              className="topic-more"
+              icon={MoreVertical}
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+              size={'small'}
+            />
+          </Dropdown>
+        </>
       )}
     </Flexbox>
   );

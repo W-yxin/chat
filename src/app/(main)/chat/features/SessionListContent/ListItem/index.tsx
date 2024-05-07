@@ -1,65 +1,32 @@
-import { Avatar, List, ListItemProps } from '@lobehub/ui';
-import { useHover } from 'ahooks';
-import { createStyles, useResponsive } from 'antd-style';
-import { memo, useMemo, useRef } from 'react';
+import { ListItemProps } from '@lobehub/ui';
+import { Dropdown } from 'antd';
+import { memo } from 'react';
+import { Flexbox } from 'react-layout-kit';
 
-const { Item } = List;
+import { ActionProps, useDropdownItems } from '../List/Item/useDropdownItems';
+import RawListItem from './item';
 
-const useStyles = createStyles(({ css, token, responsive }) => {
-  return {
-    container: css`
-      position: relative;
-
-      margin-block: 2px;
-      padding-right: 16px;
-      padding-left: 8px;
-
-      border-radius: ${token.borderRadius}px;
-      ${responsive.mobile} {
-        margin-block: 0;
-        padding-left: 12px;
-        border-radius: 0;
-      }
-    `,
-    title: css`
-      line-height: 1.2;
-    `,
-  };
-});
-
-const ListItem = memo<ListItemProps & { avatar: string; avatarBackground?: string }>(
-  ({ avatar, avatarBackground, active, showAction, actions, title, ...props }) => {
-    const ref = useRef(null);
-    const isHovering = useHover(ref);
-    const { mobile } = useResponsive();
-    const { styles } = useStyles();
-
-    const avatarRender = useMemo(
-      () => (
-        <Avatar
-          animation={isHovering}
-          avatar={avatar}
-          background={avatarBackground}
-          shape="circle"
-          size={46}
-        />
-      ),
-      [isHovering, avatar, avatarBackground],
-    );
+const ListItem = memo<ActionProps & ListItemProps & { avatar: string; avatarBackground?: string }>(
+  ({ group, id, openCreateGroupModal, setOpen, ...props }) => {
+    const items = useDropdownItems(id, group, openCreateGroupModal);
 
     return (
-      <Item
-        actions={actions}
-        active={mobile ? false : active}
-        avatar={avatarRender}
-        className={styles.container}
-        ref={ref}
-        showAction={actions && (isHovering || showAction)}
-        title={<span className={styles.title}>{title}</span>}
-        {...(props as any)}
-      />
+      <Dropdown
+        arrow={false}
+        menu={{
+          items,
+          onClick: ({ domEvent }) => {
+            domEvent.stopPropagation();
+          },
+        }}
+        onOpenChange={setOpen}
+        trigger={['contextMenu']}
+      >
+        <Flexbox>
+          <RawListItem {...(props as any)} />
+        </Flexbox>
+      </Dropdown>
     );
   },
 );
-
 export default ListItem;
