@@ -64,8 +64,8 @@ export const useMenu = () => {
       icon: <Icon icon={Settings2} />,
       key: 'setting',
       label: (
-        <Flexbox align={'center'} gap={8} horizontal>
-          <NewVersionBadge onClick={openSettings} showBadge={hasNewVersion}>
+        <Flexbox align={'center'} gap={4} horizontal>
+          <NewVersionBadge onClick={() => openSettings()} showBadge={hasNewVersion}>
             {t('userPanel.setting')}
           </NewVersionBadge>
           <ActionIcon
