@@ -16,6 +16,7 @@ declare global {
        * @deprecated
        */
       ENABLE_OAUTH_SSO?: string;
+      NEXT_PUBLIC_ENABLE_NEXT_AUTH?: string;
       NEXT_AUTH_SECRET?: string;
       /**
        * @deprecated
@@ -52,7 +53,7 @@ declare global {
 export const getAuthConfig = () => {
   if (process.env.ENABLE_OAUTH_SSO) {
     console.warn(
-      '`ENABLE_OAUTH_SSO` is deprecated and will be removed in LobeChat 1.0. just set `NEXT_AUTH_SECRET` enough',
+      '`ENABLE_OAUTH_SSO` is deprecated and will be removed in LobeChat 1.0. Please set `NEXT_PUBLIC_ENABLE_NEXT_AUTH` instead.',
     );
   }
 
@@ -112,8 +113,7 @@ export const getAuthConfig = () => {
       CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
 
       // Next Auth
-      NEXT_PUBLIC_ENABLE_NEXT_AUTH:
-        !!process.env.NEXT_AUTH_SECRET || !!process.env.ENABLE_OAUTH_SSO,
+      NEXT_PUBLIC_ENABLE_NEXT_AUTH: !!process.env.NEXT_PUBLIC_ENABLE_NEXT_AUTH,
       NEXT_AUTH_SSO_PROVIDERS: process.env.NEXT_AUTH_SSO_PROVIDERS || process.env.SSO_PROVIDERS,
       NEXT_AUTH_SECRET: process.env.NEXT_AUTH_SECRET,
 

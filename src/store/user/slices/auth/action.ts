@@ -14,7 +14,6 @@ const USER_CONFIG_FETCH_KEY = 'fetchUserConfig';
 
 export interface UserAuthAction {
   getUserConfig: () => void;
-  login: () => Promise<void>;
   /**
    * universal logout method
    */
@@ -38,10 +37,6 @@ export const createAuthSlice: StateCreator<
   getUserConfig: () => {
     console.log(n('userconfig'));
   },
-  login: async () => {
-    // TODO: 针对开启 next-auth 的场景，需要在这里调用登录方法
-    console.log(n('login'));
-  },
   logout: async () => {
     if (enableClerk) {
       get().clerkSignOut?.({ redirectUrl: location.toString() });
@@ -50,8 +45,8 @@ export const createAuthSlice: StateCreator<
     }
 
     if (enableNextAuth) {
-      // TODO: 针对开启 next-auth 的场景，需要在这里调用登录方法
-      console.log(n('logout'));
+      const { signOut } = await import('next-auth/react');
+      signOut();
     }
   },
   openLogin: async () => {
@@ -64,7 +59,8 @@ export const createAuthSlice: StateCreator<
     }
 
     if (enableNextAuth) {
-      // TODO: 针对开启 next-auth 的场景，需要在这里调用登录方法
+      const { signIn } = await import('next-auth/react');
+      signIn();
     }
   },
   openUserProfile: async () => {
@@ -76,6 +72,7 @@ export const createAuthSlice: StateCreator<
 
     if (enableNextAuth) {
       // TODO: 针对开启 next-auth 的场景，需要在这里调用打开 profile 页
+      // NextAuht 没有 profile 页，未来应该隐藏 Profile Button
     }
   },
   refreshUserConfig: async () => {
